@@ -4,8 +4,12 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
+
 android {
     compileSdkVersion 27
+    dataBinding { enabled = true }
     defaultConfig {
         applicationId "com.donank.bittooth"
         minSdkVersion 21
@@ -20,6 +24,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -31,5 +39,12 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     implementation 'com.android.support:design:27.1.1'
+
+    //RecyclerView
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+
+    //LastAdapter
+    implementation 'com.github.nitrico.lastadapter:lastadapter:2.3.0'
+    kapt "com.android.databinding:compiler:$gradle_version"
 
 }

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BitTooth</string>
+    <string name="refresh">Refresh</string>
+    <string name="available_devices">Available Devices</string>
+    <string name="paired_devices">Paired Devices</string>
+    <string name="discoverable">Discoverable</string>
 </resources>
