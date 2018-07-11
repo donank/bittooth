@@ -1,4 +1,4 @@
-package com.donank.bittooth.Utility
+package com.donank.bittooth.BTHelper
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothServerSocket

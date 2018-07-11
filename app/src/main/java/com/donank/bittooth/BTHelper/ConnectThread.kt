@@ -1,4 +1,4 @@
-package com.donank.bittooth.Utility
+package com.donank.bittooth.BTHelper
 
 import android.bluetooth.BluetoothAdapter
 import android.content.ContentValues.TAG
@@ -9,12 +9,12 @@ import java.io.IOException
 import java.util.*
 
 
-class ConnectThread:Thread() {
+class ConnectThread(device: BluetoothDevice, secure: Boolean) :Thread() {
     private val mmBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-    private lateinit var mmSocket: BluetoothSocket
-    private lateinit var mmDevice: BluetoothDevice
+    private val mmSocket: BluetoothSocket
+    private val mmDevice: BluetoothDevice
 
-    fun ConnectThread(device: BluetoothDevice) {
+    init {
         var tmp: BluetoothSocket? = null
         mmDevice = device
 

@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.donank.bittooth.BR
+import com.donank.bittooth.BTHelper.BTService
 import com.donank.bittooth.Data.Device
 import com.donank.bittooth.R
 import com.donank.bittooth.Utility.showFragment
@@ -24,11 +25,15 @@ import com.github.nitrico.lastadapter.LastAdapter
 import kotlinx.android.synthetic.main.fragment_bluetooth_dashboard.*
 import kotlinx.android.synthetic.main.item_device.view.*
 
+
+
 class BluetoothDashboard : Fragment() {
 
     private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
     private val REQUEST_ENABLE_BT = 1
+
+    private lateinit var btService: BTService
 
     private val pairedDevices = ObservableArrayList<Device>()
 
@@ -198,8 +203,22 @@ class BluetoothDashboard : Fragment() {
                 addToBackStack = addToBackStack)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        if (btService != null) {
+            if (btService.getState() == btService.STATE_NONE) {
+                btService.start()
+            }
+        }
+    }
+
+
     override fun onDestroy() {
         super.onDestroy()
+        if (btService != null) {
+            btService.stop()
+        }
         activity!!.unregisterReceiver(mReceiver)
     }
 }
