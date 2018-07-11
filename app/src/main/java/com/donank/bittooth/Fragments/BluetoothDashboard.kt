@@ -10,6 +10,7 @@ import android.databinding.ObservableArrayList
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,9 +88,8 @@ class BluetoothDashboard : Fragment() {
         recycler_available_devices.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         recycler_available_devices.adapter = availableDevicesLastAdapter
 
-        if(!bluetoothAdapter.isEnabled){
-            switch_toggleBT.isChecked = false
-        }
+        switch_toggleBT.isChecked = bluetoothAdapter.isEnabled
+        switch_toggleDiscoverable.isEnabled = bluetoothAdapter.isEnabled
 
         val storedPairedDevices = bluetoothAdapter.bondedDevices
 
@@ -113,19 +113,25 @@ class BluetoothDashboard : Fragment() {
 
         switch_toggleBT.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked){
-                if(bluetoothAdapter.isEnabled){
+                Log.d("ToggleBT - ","isCheked")
+                if(!bluetoothAdapter.isEnabled){
+                    Log.d("bluetoothAdapter - ","turning on")
                     startActivityForResult(
                             Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
                             REQUEST_ENABLE_BT
                     )
+                    switch_toggleDiscoverable.isEnabled = true
                 }
             }else{
-                if(!bluetoothAdapter.isEnabled){
+                if(bluetoothAdapter.isEnabled){
                     bluetoothAdapter.disable()
+                    switch_toggleDiscoverable.isEnabled = false
                     showInSnack(this.view!!, "Bluetooth Disabled!")
                 }
             }
         }
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
