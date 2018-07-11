@@ -47,4 +47,11 @@ dependencies {
     implementation 'com.github.nitrico.lastadapter:lastadapter:2.3.0'
     kapt "com.android.databinding:compiler:$gradle_version"
 
+    //MPAndroidChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
+
+}
+repositories {
+    maven { url 'https://jitpack.io' }
 }

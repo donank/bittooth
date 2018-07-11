@@ -7,7 +7,7 @@
 
 
     <Switch
-        android:id="@+id/switch_togleBT"
+        android:id="@+id/switch_toggleBT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
@@ -15,7 +15,7 @@
 
 
     <Switch
-        android:id="@+id/switch_togleDiscoverable"
+        android:id="@+id/switch_toggleDiscoverable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"

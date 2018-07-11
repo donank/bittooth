@@ -5,4 +5,7 @@
     <string name="paired_devices">Paired Devices</string>
     <string name="discoverable">Device Discovery</string>
     <string name="pair">Pair</string>
+    <string name="bluetooth_status">Bluetooth Status</string>
+    <string name="off">OFF</string>
+    <string name="config">CONFIG</string>
 </resources>

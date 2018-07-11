@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.donank.bittooth.R
 import com.donank.bittooth.Utility.showFragment
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 class Dashboard : Fragment() {
 
@@ -19,6 +20,16 @@ class Dashboard : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        btn_config.setOnClickListener {
+            showFragment(
+                    Fragment.instantiate(
+                            this.context,
+                         BluetoothDashboard::class.java.name
+                    ),
+                    addToBackStack = true
+            )
+        }
     }
 
     private fun showFragment(fragment: Fragment, addToBackStack: Boolean = true) {

@@ -88,7 +88,7 @@ class BluetoothDashboard : Fragment() {
         recycler_available_devices.adapter = availableDevicesLastAdapter
 
         if(!bluetoothAdapter.isEnabled){
-            switch_togleBT.isChecked = false
+            switch_toggleBT.isChecked = false
         }
 
         val storedPairedDevices = bluetoothAdapter.bondedDevices
@@ -111,7 +111,7 @@ class BluetoothDashboard : Fragment() {
             pairedLastAdapter.notifyDataSetChanged()
         }
 
-        switch_togleBT.setOnCheckedChangeListener { buttonView, isChecked ->
+        switch_toggleBT.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked){
                 if(bluetoothAdapter.isEnabled){
                     startActivityForResult(
@@ -135,7 +135,7 @@ class BluetoothDashboard : Fragment() {
                 showInSnack(this.view!!, "Bluetooth Enabled!")
             }else {
                 showInSnack(this.view!!, "Bluetooth Not Enabled!")
-                switch_togleBT.isChecked = false
+                switch_toggleBT.isChecked = false
             }
         }
     }
