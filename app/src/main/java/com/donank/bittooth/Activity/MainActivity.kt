@@ -1,6 +1,8 @@
 package com.donank.bittooth.Activity
 
+import android.Manifest
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.donank.bittooth.Fragments.Dashboard
@@ -11,6 +13,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1
+        ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION)
 
         showFragment(
                 Fragment.instantiate(
