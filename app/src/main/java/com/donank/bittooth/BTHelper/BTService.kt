@@ -41,7 +41,7 @@ class BTService constructor(context: Context, handler: Handler) {
     val STATE_CONNECTING = 2 // now initiating an outgoing connection
     val STATE_CONNECTED = 3  // now connected to a remote device
 
-    private val messageConstants : MessageConstants? = null
+    private val messageConstants = MessageConstants()
 
 
     /**
@@ -67,7 +67,7 @@ class BTService constructor(context: Context, handler: Handler) {
         mNewState = mState
 
         // Give the new state to the Handler so the UI Activity can update
-        mHandler.obtainMessage(messageConstants!!!!.MESSAGE_STATE_CHANGE, mNewState, -1).sendToTarget()
+        mHandler.obtainMessage(messageConstants!!.MESSAGE_STATE_CHANGE, mNewState, -1).sendToTarget()
     }
 
     /**
