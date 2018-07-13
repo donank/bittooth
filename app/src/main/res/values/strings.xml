@@ -8,4 +8,5 @@
     <string name="bluetooth_status">Bluetooth Status</string>
     <string name="off">OFF</string>
     <string name="config">CONFIG</string>
+    <string name="splash">Splash Image</string>
 </resources>

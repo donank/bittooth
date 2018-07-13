@@ -26,8 +26,8 @@ class BTService constructor(context: Context, handler: Handler) {
     private val MY_UUID_INSECURE = UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66")
 
     // Member fields
-    private lateinit var mAdapter: BluetoothAdapter
-    private lateinit var mHandler: Handler
+    private var mAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+    private var mHandler: Handler
     private var mSecureAcceptThread: AcceptThread? = null
     private var mInsecureAcceptThread: AcceptThread? = null
     private var mConnectThread: ConnectThread? = null
@@ -51,7 +51,6 @@ class BTService constructor(context: Context, handler: Handler) {
      * @param handler A Handler to send messages back to the UI Activity
      */
     init {
-        mAdapter = BluetoothAdapter.getDefaultAdapter()
         mState = STATE_NONE
         mNewState = mState
         mHandler = handler
@@ -67,7 +66,7 @@ class BTService constructor(context: Context, handler: Handler) {
         mNewState = mState
 
         // Give the new state to the Handler so the UI Activity can update
-        mHandler.obtainMessage(messageConstants!!.MESSAGE_STATE_CHANGE, mNewState, -1).sendToTarget()
+        mHandler.obtainMessage(messageConstants.MESSAGE_STATE_CHANGE, mNewState, -1).sendToTarget()
     }
 
     /**

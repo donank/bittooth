@@ -48,7 +48,11 @@ class BluetoothDashboard : Fragment() {
 
     private fun initPairedLastAdapter(): LastAdapter {
         return LastAdapter(pairedDevices, BR.item)
-                .map<Device, ItemDeviceBinding>(R.layout.item_device)
+                .map<Device, ItemDeviceBinding>(R.layout.item_device){
+                    onBind {
+                        it.itemView.btn_pair.visibility = View.GONE
+                    }
+                }
                 .into(recycler_paired_devices)
     }
 
@@ -103,24 +107,22 @@ class BluetoothDashboard : Fragment() {
             refreshPairedDevices()
         }
 
-        switch_toggleBT.setOnCheckedChangeListener { buttonView, isChecked ->
+        if (bluetoothAdapter.scanMode == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE){
+            switch_toggleDiscoverable.isChecked = true
+        }
+
+        switch_toggleBT.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                Log.d("ToggleBT - ", "isCheked")
-                if (!bluetoothAdapter.isEnabled) {
-                    Log.d("bluetoothAdapter - ", "turning on")
-                    startActivityForResult(
-                            Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
-                            REQUEST_ENABLE_BT
-                    )
-                    bluetoothAdapter.startDiscovery()
-                    switch_toggleDiscoverable.isEnabled = true
-                }
+                enableBt()
             } else {
-                if (bluetoothAdapter.isEnabled) {
-                    bluetoothAdapter.disable()
-                    switch_toggleDiscoverable.isEnabled = false
-                    showInSnack(this.view!!, "Bluetooth Disabled!")
-                }
+                disableBt()
+            }
+        }
+
+        switch_toggleDiscoverable.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked){
+                Log.d("ToggleDiscovery - ", "isCheked")
+                enableBtDiscoverable()
             }
         }
 
@@ -137,11 +139,48 @@ class BluetoothDashboard : Fragment() {
 
     }
 
+    private fun enableBt() {
+        Log.d("ToggleBT - ", "isCheked")
+        if (!bluetoothAdapter.isEnabled) {
+            Log.d("bluetoothAdapter - ", "turning on")
+            startActivityForResult(
+                    Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
+                    REQUEST_ENABLE_BT
+            )
+        }
+    }
+
+    private fun disableBt() {
+        if (bluetoothAdapter.isEnabled) {
+            bluetoothAdapter.disable()
+            switch_toggleDiscoverable.isChecked = false
+            switch_toggleDiscoverable.isEnabled = false
+            showInSnack(this.view!!, "Bluetooth Disabled!")
+        }
+    }
+
+    private fun enableBtDiscoverable(){
+        if (bluetoothAdapter.scanMode != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            Handler().postDelayed({
+                switch_toggleDiscoverable.isEnabled = false
+            }, 3000)
+            showInSnack(this.view!!,"Device Discoverable for 300s")
+            val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
+            startActivity(discoverableIntent)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_ENABLE_BT -> if (resultCode == Activity.RESULT_OK) {
                 showInSnack(this.view!!, "Bluetooth Enabled!")
+                bluetoothAdapter.startDiscovery()
+                switch_toggleDiscoverable.isEnabled = true
+                if (bluetoothAdapter.scanMode == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+                    switch_toggleDiscoverable.isChecked = true
+                }
             } else {
                 showInSnack(this.view!!, "Bluetooth Not Enabled!")
                 switch_toggleBT.isChecked = false
@@ -182,7 +221,7 @@ class BluetoothDashboard : Fragment() {
         }
     }
 
-    fun refreshPairedDevices(){
+    private fun refreshPairedDevices(){
         val storedPairedDevices = bluetoothAdapter.bondedDevices
         if (storedPairedDevices.size > 0) {
             storedPairedDevices.forEach {

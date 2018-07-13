@@ -46,4 +46,6 @@
         android:layout_gravity="bottom"
         android:text="Send Byte"/>
 
+
+
 </FrameLayout>

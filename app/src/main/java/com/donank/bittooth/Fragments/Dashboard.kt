@@ -110,12 +110,19 @@ class Dashboard : Fragment() {
 
 
     private fun send(data: ByteArray) {
-        if (btService.getState() != btService.STATE_CONNECTED) {
-            showInSnack(this.view!!, "Device Not Connected!")
-            return
-        }
-        if (data.isNotEmpty()) {
-            btService.write(data)
+        if(bluetoothAdapter.isEnabled){
+            if (btService.getState() != btService.STATE_CONNECTED) {
+                showInSnack(this.view!!, "Device Not Connected!")
+                return
+            }
+            if (data.isNotEmpty()) {
+                btService.write(data)
+            }
+        }else{
+            startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_ENABLE_BT)
+            if(btService == null){
+                btService = BTService(activity!!, Handler())
+            }
         }
     }
 
@@ -126,14 +133,7 @@ class Dashboard : Fragment() {
                 addToBackStack = addToBackStack)
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (!bluetoothAdapter.isEnabled) {
-            startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_ENABLE_BT)
-        } else if (btService == null) {
-            btService = BTService(activity!!, Handler())
-        }
-    }
+
 
     override fun onResume() {
         super.onResume()
